@@ -6,4 +6,9 @@ abstract class BaseBloc {
   final AppRouter appRouter;
 
   BaseBloc(this.appRouter);
+
+  @mustCallSuper
+  void dispose(){
+
+  }
 }

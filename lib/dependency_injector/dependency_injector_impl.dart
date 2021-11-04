@@ -29,7 +29,7 @@ class DI implements IDependencyInjector {
   SplashBloc getSplashBloc() => SplashBloc(_getAppRouter(), _getEmployeeRepo());
 
   @override
-  ListEmployeesBloc getListEmployeesBloc() => ListEmployeesBloc(_getAppRouter());
+  ListEmployeesBloc getListEmployeesBloc() => ListEmployeesBloc(_getAppRouter(),_getEmployeeRepo());
 
   ///////////////////////////////////////////////
   //////              DAO            ////////////

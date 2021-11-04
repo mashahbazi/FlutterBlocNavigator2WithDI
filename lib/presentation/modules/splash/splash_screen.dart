@@ -42,6 +42,12 @@ class _SplashScreenState extends BaseScreenState<SplashScreen, SplashBloc> {
       // },
     ));
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    bloc.dispose();
+  }
 }
 
 class _Style {

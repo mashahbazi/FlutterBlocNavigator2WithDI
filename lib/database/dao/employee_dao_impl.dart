@@ -27,4 +27,23 @@ class EmployeeDaoImpl extends BaseDao implements IEmployeeDao {
           DatabaseExceptionCodes.insertEmployees, e.toString());
     }
   }
+
+  @override
+  Future<List<EmployeeModel>> getList({int limit = -1, int offset = 0}) async {
+    try {
+      Database database = await tempoDB.database;
+      List<Map<String, Object?>> result = await database.query(
+        EmployeesTable.tableName,
+        limit: limit,
+        offset: offset,
+        orderBy: EmployeeProps.firstName,
+      );
+      return result
+          .map((Map<String, dynamic> item) => EmployeeModel.fromJson(item))
+          .toList();
+    } catch (e) {
+      throw DatabaseException(
+          DatabaseExceptionCodes.getListEmployees, e.toString());
+    }
+  }
 }

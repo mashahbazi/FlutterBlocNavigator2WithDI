@@ -55,4 +55,14 @@ class EmployeeModel {
       _$EmployeeModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$EmployeeModelToJson(this);
+
+  @override
+  int get hashCode => id;
+
+  @override
+  String toString() => "$id";
+
+  @override
+  bool operator ==(Object other) =>
+      other is EmployeeModel && other.hashCode == hashCode;
 }

@@ -2,7 +2,6 @@ import 'package:casestudy/presentation/modules/core/base_page.dart';
 import 'package:casestudy/presentation/modules/core/screen_configuration.dart';
 import 'package:casestudy/presentation/modules/list_employees/list_employees_configuration.dart';
 import 'package:casestudy/presentation/modules/list_employees/list_employees_page.dart';
-import 'package:casestudy/presentation/modules/list_employees/list_employees_screen.dart';
 import 'package:casestudy/presentation/modules/splash/splash_configuration.dart';
 import 'package:casestudy/presentation/modules/splash/splash_page.dart';
 import 'package:flutter/cupertino.dart';

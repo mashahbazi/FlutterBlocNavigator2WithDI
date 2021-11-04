@@ -15,4 +15,5 @@ class DatabaseException implements Exception{
 
 class DatabaseExceptionCodes{
   static const int insertEmployees = 1;
+  static const int getListEmployees = 2;
 }
