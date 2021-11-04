@@ -3,6 +3,14 @@ class SourceException implements Exception {
   final String? message;
 
   SourceException(this.code, [this.message]);
+
+  @override
+  String toString() {
+    return '''Source Exception
+    code"$code
+    message:$message
+    ''';
+  }
 }
 
 class SourceExceptionCode {

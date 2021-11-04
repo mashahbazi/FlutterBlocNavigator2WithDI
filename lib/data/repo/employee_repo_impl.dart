@@ -1,6 +1,7 @@
 import 'package:casestudy/common/models/employee_model.dart';
 import 'package:casestudy/data/api/employee_source_interface.dart';
 import 'package:casestudy/data/dao/employee_dao_interface.dart';
+import 'package:casestudy/database/exception/database_exception.dart';
 import 'package:casestudy/domain/repo/employee_repo_interface.dart';
 
 class EmployeeRepoImpl implements IEmployeeRepo {
@@ -14,8 +15,9 @@ class EmployeeRepoImpl implements IEmployeeRepo {
     try {
       List<EmployeeModel> employees = await _employeeSource.loadData();
       await _employeeDao.insertAllData(employees);
-    } catch (e) {
-     // TODO: handle me
+    } on Exception catch (e) {
+      throw DatabaseException(
+          DatabaseExceptionCodes.insertEmployees, e.toString());
     }
   }
 }
