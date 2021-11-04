@@ -7,9 +7,14 @@ class AppColors {
   static const Color splash = Color(0xFF57B99B);
 
   static const Color white = Colors.white;
+  static const Color black = Colors.black;
+  static const Color transparent = Colors.transparent;
 
   ///////////////////////////////////////////////
   //////              Gray           ////////////
   ///////////////////////////////////////////////
-  static const Color lightGray = Color(0xFFB6B1B1);
+  static const Color lightGray = Color(0xFFF8F5F5);
+  static const Color gray = Color(0xFF9E9393);
+  static const Color darkGray = Color(0xFF504D4D);
+  static const Color borderColor = Color(0xFFE8E8E8);
 }

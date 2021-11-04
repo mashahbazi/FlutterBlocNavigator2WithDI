@@ -1,5 +1,6 @@
 import 'package:casestudy/domain/repo/employee_repo_interface.dart';
 import 'package:casestudy/presentation/modules/core/base_bloc.dart';
+import 'package:casestudy/presentation/modules/list_employees/list_employees_configuration.dart';
 import 'package:casestudy/presentation/router/app_router.dart';
 
 class SplashBloc extends BaseBloc {
@@ -22,6 +23,6 @@ class SplashBloc extends BaseBloc {
   }
 
   void navigateToListEmployees() {
-    // TODO : Add navigation
+    appRouter.changeToScreen(ListEmployeesConfiguration());
   }
 }

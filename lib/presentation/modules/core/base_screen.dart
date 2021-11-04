@@ -12,7 +12,7 @@ abstract class BaseScreen extends StatefulWidget {
 abstract class BaseScreenState<K extends BaseScreen, T extends BaseBloc>
     extends State<K> {
   late final bloc =
-      context.dependOnInheritedWidgetOfExactType<InheritedScreen>()!.bloc as T;
+      context.dependOnInheritedWidgetOfExactType<InheritedScreen<K, T>>()!.bloc;
 
   @override
   Widget build(BuildContext context) {

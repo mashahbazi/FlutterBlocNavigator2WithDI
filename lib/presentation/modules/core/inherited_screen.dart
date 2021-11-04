@@ -9,10 +9,11 @@ import 'base_screen.dart';
 /// All screens should wrap into an [InheritedScreen] so screen state can get
 /// bloc from it.
 ///
-class InheritedScreen<T extends BaseBloc> extends InheritedWidget {
+class InheritedScreen<K extends BaseScreen, T extends BaseBloc>
+    extends InheritedWidget {
   final T bloc;
 
-  const InheritedScreen(BaseScreen screen, this.bloc, {Key? key})
+  const InheritedScreen(K screen, this.bloc, {Key? key})
       : super(child: screen, key: key);
 
   @override

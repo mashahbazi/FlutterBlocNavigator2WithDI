@@ -22,7 +22,7 @@ abstract class BasePage<T extends BaseScreen, K extends BaseBloc> extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (_) => InheritedScreen(getScreen(), getBloc()),
+      builder: (_) => InheritedScreen<T,K>(getScreen(), getBloc()),
     );
   }
 
