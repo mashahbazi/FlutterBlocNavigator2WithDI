@@ -1,3 +1,5 @@
+import 'package:casestudy/presentation/utils/app_colors.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'base_bloc.dart';
@@ -10,5 +12,22 @@ abstract class BaseScreen extends StatefulWidget {
 abstract class BaseScreenState<K extends BaseScreen, T extends BaseBloc>
     extends State<K> {
   late final bloc =
-  context.dependOnInheritedWidgetOfExactType<InheritedScreen>()!.bloc as T;
+      context.dependOnInheritedWidgetOfExactType<InheritedScreen>()!.bloc as T;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      appBar: buildAppBar(),
+      body: buildBody(),
+    );
+  }
+
+  Color get backgroundColor => AppColors.lightGray;
+
+  PreferredSizeWidget? buildAppBar() {
+    return AppBar();
+  }
+
+  Widget buildBody();
 }

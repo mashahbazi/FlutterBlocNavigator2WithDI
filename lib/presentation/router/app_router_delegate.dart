@@ -1,5 +1,7 @@
 import 'package:casestudy/presentation/modules/core/base_page.dart';
 import 'package:casestudy/presentation/modules/core/screen_configuration.dart';
+import 'package:casestudy/presentation/modules/splash/splash_configuration.dart';
+import 'package:casestudy/presentation/modules/splash/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppRouteDelegate extends RouterDelegate<ScreenConfiguration>
@@ -17,7 +19,7 @@ class AppRouteDelegate extends RouterDelegate<ScreenConfiguration>
 
   @override
   Widget build(BuildContext context) {
-    List<BasePage> pages = getPages();
+    List<BasePage> pages = _getPages();
     return Navigator(
       key: navigatorKey,
       pages: pages,
@@ -28,9 +30,15 @@ class AppRouteDelegate extends RouterDelegate<ScreenConfiguration>
     );
   }
 
-  List<BasePage> getPages() {
+  List<BasePage> _getPages() {
+    if (_buildConfiguration == null ||
+        _buildConfiguration is SplashConfiguration) {
+      return _getSplashStack();
+    }
     return [];
   }
+
+  List<BasePage> _getSplashStack() => const [SplashPage()];
 
   @override
   Future<void> setNewRoutePath(ScreenConfiguration configuration) async {
