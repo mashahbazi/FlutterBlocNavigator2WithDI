@@ -1,12 +1,14 @@
 import 'package:casestudy/presentation/modules/core/base_page.dart';
 import 'package:casestudy/presentation/modules/core/screen_configuration.dart';
+import 'package:casestudy/presentation/modules/employee/employee_configuration.dart';
+import 'package:casestudy/presentation/modules/employee/employee_page.dart';
 import 'package:casestudy/presentation/modules/list_employees/list_employees_configuration.dart';
 import 'package:casestudy/presentation/modules/list_employees/list_employees_page.dart';
 import 'package:casestudy/presentation/modules/splash/splash_configuration.dart';
 import 'package:casestudy/presentation/modules/splash/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 
-class AppRouteDelegate extends RouterDelegate<ScreenConfiguration>
+class AppRouterDelegate extends RouterDelegate<ScreenConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<ScreenConfiguration> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   ScreenConfiguration? _buildConfiguration;
@@ -38,6 +40,8 @@ class AppRouteDelegate extends RouterDelegate<ScreenConfiguration>
       return _getSplashStack();
     } else if (_buildConfiguration is ListEmployeesConfiguration) {
       return _getListEmployeesStack();
+    } else if (_buildConfiguration is EmployeeConfiguration) {
+      return _getEmployeeStack(_buildConfiguration as EmployeeConfiguration);
     }
     return _getSplashStack();
   }
@@ -45,6 +49,15 @@ class AppRouteDelegate extends RouterDelegate<ScreenConfiguration>
   List<BasePage> _getSplashStack() => const [SplashPage()];
 
   List<BasePage> _getListEmployeesStack() => const [ListEmployeesPage()];
+
+  List<BasePage> _getEmployeeStack(EmployeeConfiguration buildConfiguration) =>
+      [
+        const ListEmployeesPage(),
+        EmployeePage(
+          buildConfiguration.employeeId,
+          buildConfiguration.employeeModel,
+        )
+      ];
 
   @override
   Future<void> setNewRoutePath(ScreenConfiguration configuration) async {

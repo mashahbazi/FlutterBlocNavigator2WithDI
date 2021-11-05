@@ -1,4 +1,5 @@
 import 'package:casestudy/presentation/modules/core/screen_configuration.dart';
+import 'package:casestudy/presentation/modules/employee/employee_configuration.dart';
 import 'package:casestudy/presentation/modules/list_employees/list_employees_configuration.dart';
 import 'package:casestudy/presentation/modules/splash/splash_configuration.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,8 @@ class AppRouteInformationParser
       switch (pathSegments.length) {
         case 1:
           return _parseSegmentsWithLengthOne(pathSegments);
+        case 2:
+          return _parseSegmentsWithLengthTwo(pathSegments);
       }
     }
     return SynchronousFuture(SplashConfiguration());
@@ -25,6 +28,14 @@ class AppRouteInformationParser
       List<String> pathSegments) async {
     if (pathSegments.first == ListEmployeesConfiguration.name) {
       return SynchronousFuture(ListEmployeesConfiguration());
+    }
+    return SynchronousFuture(SplashConfiguration());
+  }
+
+  Future<ScreenConfiguration> _parseSegmentsWithLengthTwo(
+      List<String> pathSegments) async {
+    if (pathSegments.first == "employee") {
+      return SynchronousFuture(EmployeeConfiguration(pathSegments.last, null));
     }
     return SynchronousFuture(SplashConfiguration());
   }

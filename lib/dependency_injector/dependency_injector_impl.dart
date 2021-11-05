@@ -5,6 +5,7 @@ import 'package:casestudy/database/dao/employee_dao_impl.dart';
 import 'package:casestudy/database/tempo_db.dart';
 import 'package:casestudy/dependency_injector/dependency_injector_interface.dart';
 import 'package:casestudy/domain/repo/employee_repo_interface.dart';
+import 'package:casestudy/presentation/modules/employee/employee_bloc.dart';
 import 'package:casestudy/presentation/modules/list_employees/list_employees_bloc.dart';
 import 'package:casestudy/presentation/modules/splash/splash_bloc.dart';
 import 'package:casestudy/presentation/router/app_router.dart';
@@ -19,8 +20,8 @@ class DI implements IDependencyInjector {
   DI._();
 
   @override
-  AppRouteDelegate getRouteDelegate() =>
-      _getSingleton<AppRouteDelegate>(() => AppRouteDelegate());
+  AppRouterDelegate getRouteDelegate() =>
+      _getSingleton<AppRouterDelegate>(() => AppRouterDelegate());
 
   ///////////////////////////////////////////////
   //////              Bloc           ////////////
@@ -29,7 +30,16 @@ class DI implements IDependencyInjector {
   SplashBloc getSplashBloc() => SplashBloc(_getAppRouter(), _getEmployeeRepo());
 
   @override
-  ListEmployeesBloc getListEmployeesBloc() => ListEmployeesBloc(_getAppRouter(),_getEmployeeRepo());
+  ListEmployeesBloc getListEmployeesBloc() =>
+      ListEmployeesBloc(_getAppRouter(), _getEmployeeRepo());
+
+  @override
+  EmployeeBloc getEmployeeBlocFromModel(employeeModel) =>
+      EmployeeBloc.fromModel(_getAppRouter(), employeeModel);
+
+  @override
+  EmployeeBloc getEmployeeBlocFromId(String employeeId) =>
+      EmployeeBloc.fromId(_getAppRouter(), _getEmployeeRepo(), employeeId);
 
   ///////////////////////////////////////////////
   //////              DAO            ////////////
