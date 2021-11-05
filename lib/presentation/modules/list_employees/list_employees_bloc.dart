@@ -1,4 +1,5 @@
 import 'package:casestudy/common/models/employee_group_model.dart';
+import 'package:casestudy/presentation/modules/employee/employee_configuration.dart';
 import "package:collection/collection.dart";
 import 'dart:async';
 
@@ -49,24 +50,9 @@ class ListEmployeesBloc extends BaseBloc {
     }
   }
 
-  Future<EmployeeListModel> _fetchData(String? employeeFirsName) async {
-    EmployeeListModel employeeListModel =
-        await _employeeRepo.getNextEmployees(employeeFirsName);
-    return employeeListModel;
+  void onTapEmployee(EmployeeModel employeeModel) {
+    appRouter.changeToScreen(EmployeeConfiguration(employeeModel.id, employeeModel));
   }
-
-  List<EmployeeGroupModel>? _mapEmployeeList(List<EmployeeModel>? employees) {
-    if (employees != null) {
-      Map<String, List<EmployeeModel>> groupedData =
-          groupBy(employees, (EmployeeModel e) => e.firstName.characters.first);
-      return groupedData.keys
-          .map<EmployeeGroupModel>(
-              (String key) => EmployeeGroupModel(key, groupedData[key]!))
-          .toList();
-    }
-  }
-
-  void onTapEmployee(EmployeeModel employeeModel) {}
 
   void charGroupGetVisible(String char) {
     if (char != _visibleCharController.value) {
@@ -88,6 +74,23 @@ class ListEmployeesBloc extends BaseBloc {
       loadedEmployees = loadedEmployees.toSet().toList();
 
       _loadedEmployeesController.add(loadedEmployees);
+    }
+  }
+
+  Future<EmployeeListModel> _fetchData(String? employeeFirsName) async {
+    EmployeeListModel employeeListModel =
+    await _employeeRepo.getNextEmployees(employeeFirsName);
+    return employeeListModel;
+  }
+
+  List<EmployeeGroupModel>? _mapEmployeeList(List<EmployeeModel>? employees) {
+    if (employees != null) {
+      Map<String, List<EmployeeModel>> groupedData =
+      groupBy(employees, (EmployeeModel e) => e.firstName.characters.first);
+      return groupedData.keys
+          .map<EmployeeGroupModel>(
+              (String key) => EmployeeGroupModel(key, groupedData[key]!))
+          .toList();
     }
   }
 

@@ -18,15 +18,20 @@ class EmployeeRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.fromSize(
-      size: Size.fromHeight(context.getHeightFraction(0.14)),
-      child: Row(
-        children: [
-          _buildImage(context),
-          Expanded(
-            child: _buildInfo(context),
-          )
-        ],
+    return InkWell(
+      onTap: () {
+        onPressItem(employeeModel);
+      },
+      child: SizedBox.fromSize(
+        size: Size.fromHeight(context.getHeightFraction(0.14)),
+        child: Row(
+          children: [
+            _buildImage(context),
+            Expanded(
+              child: _buildInfo(context),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -48,7 +53,8 @@ class EmployeeRowWidget extends StatelessWidget {
     return CustomPaint(
       painter: const DashSeparatorPainter(),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: context.getHeightFraction(0.01)),
+        padding:
+            EdgeInsets.symmetric(vertical: context.getHeightFraction(0.01)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

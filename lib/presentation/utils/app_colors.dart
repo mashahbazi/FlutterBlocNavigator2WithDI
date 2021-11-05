@@ -16,10 +16,18 @@ class AppColors {
   static const Color lightGray = Color(0xFFF8F5F5);
   static const Color gray = Colors.grey;
   static const Color darkGray = Color(0xFF504D4D);
+  static const Color hardGray = Color(0xFF323131);
   static const Color borderColor = Color(0xFFE8E8E8);
 
   ///////////////////////////////////////////////
   //////              Blue           ////////////
   ///////////////////////////////////////////////
+  static const Color lightBlue = Color(0xFF7F81DC);
   static const Color blue = Color(0xFF2B2EBD);
+
+  ///////////////////////////////////////////////
+  //////              Red           ////////////
+  ///////////////////////////////////////////////
+  static const Color lightRed = Colors.red;
+  static const Color red = Colors.red;
 }

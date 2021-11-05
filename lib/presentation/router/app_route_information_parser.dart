@@ -35,7 +35,10 @@ class AppRouteInformationParser
   Future<ScreenConfiguration> _parseSegmentsWithLengthTwo(
       List<String> pathSegments) async {
     if (pathSegments.first == "employee") {
-      return SynchronousFuture(EmployeeConfiguration(pathSegments.last, null));
+      int? id = int.tryParse(pathSegments.last);
+      if(id !=null) {
+        return SynchronousFuture(EmployeeConfiguration(id, null));
+      }
     }
     return SynchronousFuture(SplashConfiguration());
   }

@@ -7,7 +7,7 @@ import 'employee_bloc.dart';
 import 'employee_screen.dart';
 
 class EmployeePage extends BasePage<EmployeeScreen, EmployeeBloc> {
-  final String employeeId;
+  final int employeeId;
   final EmployeeModel? employeeModel;
 
   EmployeePage(this.employeeId, this.employeeModel)

@@ -15,15 +15,15 @@ class EmployeeBloc extends BaseBloc {
       EmployeeBloc._(appRouter, BehaviorSubject.seeded(employeeModel));
 
   factory EmployeeBloc.fromId(
-      AppRouter appRouter, IEmployeeRepo employeeRepo, String id) {
+      AppRouter appRouter, IEmployeeRepo employeeRepo, int id) {
     EmployeeBloc employeeBloc = EmployeeBloc._(appRouter, BehaviorSubject());
-    employeeBloc.loadEmployee(employeeRepo);
+    employeeBloc.loadEmployee(employeeRepo, id);
     return employeeBloc;
   }
 
   Stream<EmployeeModel> get employeeSteam => _employeesController.stream;
 
-  Future<void> loadEmployee(IEmployeeRepo employeeRepo) async {}
+  Future<void> loadEmployee(IEmployeeRepo employeeRepo, int id) async {}
 
   @override
   void dispose() {

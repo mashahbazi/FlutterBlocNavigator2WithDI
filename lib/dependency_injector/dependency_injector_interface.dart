@@ -13,5 +13,5 @@ abstract class IDependencyInjector {
 
   EmployeeBloc getEmployeeBlocFromModel(EmployeeModel employeeModel);
 
-  EmployeeBloc getEmployeeBlocFromId(String employeeId);
+  EmployeeBloc getEmployeeBlocFromId(int employeeId);
 }

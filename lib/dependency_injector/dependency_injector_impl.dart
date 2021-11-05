@@ -38,7 +38,7 @@ class DI implements IDependencyInjector {
       EmployeeBloc.fromModel(_getAppRouter(), employeeModel);
 
   @override
-  EmployeeBloc getEmployeeBlocFromId(String employeeId) =>
+  EmployeeBloc getEmployeeBlocFromId(int employeeId) =>
       EmployeeBloc.fromId(_getAppRouter(), _getEmployeeRepo(), employeeId);
 
   ///////////////////////////////////////////////

@@ -2,7 +2,7 @@ import 'package:casestudy/common/models/employee_model.dart';
 import 'package:casestudy/presentation/modules/core/screen_configuration.dart';
 
 class EmployeeConfiguration extends ScreenConfiguration{
-  final String employeeId;
+  final int employeeId;
   final EmployeeModel? employeeModel;
 
   EmployeeConfiguration(this.employeeId, this.employeeModel);
