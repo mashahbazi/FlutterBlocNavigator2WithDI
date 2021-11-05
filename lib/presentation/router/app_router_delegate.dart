@@ -9,7 +9,7 @@ import 'package:casestudy/presentation/modules/splash/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppRouterDelegate extends RouterDelegate<ScreenConfiguration>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<ScreenConfiguration> {
+    with ChangeNotifier {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   ScreenConfiguration? _buildConfiguration;
 
@@ -29,6 +29,7 @@ class AppRouterDelegate extends RouterDelegate<ScreenConfiguration>
       pages: pages,
       onPopPage: (route, result) {
         if (!route.didPop(result)) return false;
+        popRoute();
         return true;
       },
     );
@@ -37,26 +38,29 @@ class AppRouterDelegate extends RouterDelegate<ScreenConfiguration>
   List<BasePage> _getPages() {
     if (_buildConfiguration == null ||
         _buildConfiguration is SplashConfiguration) {
-      return _getSplashStack();
+      return _getSplashStack((_buildConfiguration as SplashConfiguration?) ??
+          SplashConfiguration());
     } else if (_buildConfiguration is ListEmployeesConfiguration) {
-      return _getListEmployeesStack();
+      return _getListEmployeesStack(
+          _buildConfiguration as ListEmployeesConfiguration);
     } else if (_buildConfiguration is EmployeeConfiguration) {
       return _getEmployeeStack(_buildConfiguration as EmployeeConfiguration);
     }
-    return _getSplashStack();
+    return _getSplashStack(SplashConfiguration());
   }
 
-  List<BasePage> _getSplashStack() => const [SplashPage()];
+  List<BasePage> _getSplashStack(SplashConfiguration splashConfiguration) =>
+      [SplashPage(splashConfiguration)];
 
-  List<BasePage> _getListEmployeesStack() => const [ListEmployeesPage()];
+  List<BasePage> _getListEmployeesStack(
+          ListEmployeesConfiguration listEmployeesConfiguration) =>
+      [ListEmployeesPage(listEmployeesConfiguration)];
 
-  List<BasePage> _getEmployeeStack(EmployeeConfiguration buildConfiguration) =>
+  List<BasePage> _getEmployeeStack(
+          EmployeeConfiguration employeeConfiguration) =>
       [
-        const ListEmployeesPage(),
-        EmployeePage(
-          buildConfiguration.employeeId,
-          buildConfiguration.employeeModel,
-        )
+        ListEmployeesPage(ListEmployeesConfiguration()),
+        EmployeePage(employeeConfiguration)
       ];
 
   @override
@@ -66,4 +70,18 @@ class AppRouterDelegate extends RouterDelegate<ScreenConfiguration>
 
   @override
   ScreenConfiguration? get currentConfiguration => _buildConfiguration;
+
+  @override
+  Future<bool> popRoute() {
+    List<BasePage> pages = _getPages();
+    if (pages.length > 1) {
+      pages.removeLast();
+      _buildConfiguration = pages.last.screenConfiguration;
+      notifyListeners();
+      return Future.value(true);
+    } else {
+      _navigatorKey.currentState?.pop();
+    }
+    return Future.value(true);
+  }
 }

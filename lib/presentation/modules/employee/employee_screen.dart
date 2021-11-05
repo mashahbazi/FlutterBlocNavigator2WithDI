@@ -44,9 +44,14 @@ class _EmployeeScreenState
           color: AppColors.black,
         ),
       ],
-      leading: const Icon(
-        Icons.arrow_back,
-        color: AppColors.black,
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back,
+          color: AppColors.black,
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
       flexibleSpace: FlexibleSpaceBar(
         background: Padding(
@@ -99,8 +104,8 @@ class _EmployeeScreenState
       color: AppColors.white,
       child: DottedBorder(
         color: AppColors.gray,
-        padding: EdgeInsets.only(top: imageHeight/2),
-        dashPattern: const [10,10],
+        padding: EdgeInsets.only(top: imageHeight / 2),
+        dashPattern: const [10, 10],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -186,58 +191,57 @@ class _EmployeeScreenState
   }
 
   Widget _buildBasicInformation() {
-    return  Container(
-        margin: EdgeInsets.symmetric(horizontal: context.getWidthFraction(0.06)),
-        color: AppColors.white,
-        child:Column(
-          children: [
-            Column(
-              children: [
-                InformationRowWidget(
-                  title: "First Name",
-                  stream: bloc.employeeSteam.map(
-                          (EmployeeModel employeeModel) => employeeModel.firstName),
-                ),
-                InformationRowWidget(
-                  title: "Last Name",
-                  stream: bloc.employeeSteam.map(
-                          (EmployeeModel employeeModel) => employeeModel.lastName),
-                ),
-                InformationRowWidget(
-                  title: "Email",
-                  stream: bloc.employeeSteam
-                      .map((EmployeeModel employeeModel) => employeeModel.email),
-                ),
-                InformationRowWidget(
-                  title: "Contact Number",
-                  stream: bloc.employeeSteam.map((EmployeeModel employeeModel) =>
-                  employeeModel.contactNumber),
-                ),
-                InformationRowWidget(
-                  title: "Age",
-                  stream: bloc.employeeSteam.map((EmployeeModel employeeModel) =>
-                      employeeModel.age.toString()),
-                ),
-                InformationRowWidget(
-                  title: "DOB",
-                  stream: bloc.employeeSteam
-                      .map((EmployeeModel employeeModel) => employeeModel.dob),
-                ),
-                InformationRowWidget(
-                  title: "Salary",
-                  stream: bloc.employeeSteam.map((EmployeeModel employeeModel) =>
-                      employeeModel.salary.toString()),
-                ),
-                InformationRowWidget(
-                  title: "Address",
-                  stream: bloc.employeeSteam.map(
-                          (EmployeeModel employeeModel) => employeeModel.address),
-                ),
-              ],
-            ),
-          ],
-        ),
-
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: context.getWidthFraction(0.06)),
+      color: AppColors.white,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              InformationRowWidget(
+                title: "First Name",
+                stream: bloc.employeeSteam.map(
+                    (EmployeeModel employeeModel) => employeeModel.firstName),
+              ),
+              InformationRowWidget(
+                title: "Last Name",
+                stream: bloc.employeeSteam.map(
+                    (EmployeeModel employeeModel) => employeeModel.lastName),
+              ),
+              InformationRowWidget(
+                title: "Email",
+                stream: bloc.employeeSteam
+                    .map((EmployeeModel employeeModel) => employeeModel.email),
+              ),
+              InformationRowWidget(
+                title: "Contact Number",
+                stream: bloc.employeeSteam.map((EmployeeModel employeeModel) =>
+                    employeeModel.contactNumber),
+              ),
+              InformationRowWidget(
+                title: "Age",
+                stream: bloc.employeeSteam.map((EmployeeModel employeeModel) =>
+                    employeeModel.age.toString()),
+              ),
+              InformationRowWidget(
+                title: "DOB",
+                stream: bloc.employeeSteam
+                    .map((EmployeeModel employeeModel) => employeeModel.dob),
+              ),
+              InformationRowWidget(
+                title: "Salary",
+                stream: bloc.employeeSteam.map((EmployeeModel employeeModel) =>
+                    employeeModel.salary.toString()),
+              ),
+              InformationRowWidget(
+                title: "Address",
+                stream: bloc.employeeSteam.map(
+                    (EmployeeModel employeeModel) => employeeModel.address),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
