@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:casestudy/common/models/employee_list_model.dart';
 import 'package:casestudy/common/models/employee_model.dart';
-import 'package:casestudy/common/models/pagination_model.dart';
 import 'package:casestudy/domain/repo/employee_repo_interface.dart';
 import 'package:casestudy/presentation/modules/core/base_bloc.dart';
 import 'package:casestudy/presentation/router/app_router.dart';
@@ -16,11 +15,15 @@ class ListEmployeesBloc extends BaseBloc {
 
   final BehaviorSubject<List<EmployeeModel>?> _loadedEmployeesController =
       BehaviorSubject();
-  final BehaviorSubject<String> _visibleCharController = BehaviorSubject();
+  final BehaviorSubject<String> _visibleCharController =
+      BehaviorSubject.seeded("");
 
-  PaginationModel? _loadingPage;
+  String? _loadingEmployeeName;
 
-  ListEmployeesBloc(AppRouter appRouter, this._employeeRepo) : super(appRouter);
+  ListEmployeesBloc(AppRouter appRouter, this._employeeRepo)
+      : super(appRouter) {
+    loadData();
+  }
 
   Stream<List<EmployeeGroupModel>?> get employeeGroupStream =>
       _loadedEmployeesController.stream.map(_mapEmployeeList);
@@ -29,23 +32,26 @@ class ListEmployeesBloc extends BaseBloc {
 
   Stream<String> get charStream => _visibleCharController.stream;
 
-  Future<PaginationModel?> loadData(PaginationModel loadPage) async {
-    if (_loadingPage == null || _loadingPage != loadPage) {
-      _loadingPage = loadPage;
-      EmployeeListModel employeeListModel = await _fetchData(loadPage);
-      List<EmployeeModel> loadedEmployees = _loadedEmployeesController.hasValue
+  List<EmployeeModel> get _loadedEmployees =>
+      _loadedEmployeesController.hasValue
           ? _loadedEmployeesController.value!
           : [];
+
+  Future<void> loadData() async {
+    String? employeeName = _loadedEmployees.lastOrNull?.firstName;
+    if (_loadingEmployeeName == null || _loadingEmployeeName != employeeName) {
+      _loadingEmployeeName = employeeName;
+      EmployeeListModel employeeListModel = await _fetchData(employeeName);
+      List<EmployeeModel> loadedEmployees = _loadedEmployees;
       loadedEmployees.addAll(employeeListModel.employees);
       _loadedEmployeesController.add(loadedEmployees);
-      _loadingPage = null;
-      return employeeListModel.paginationModel;
+      _loadingEmployeeName = null;
     }
-    return null;
   }
 
-  Future<EmployeeListModel> _fetchData(PaginationModel loadPage) async {
-    EmployeeListModel employeeListModel = await _employeeRepo.getList(loadPage);
+  Future<EmployeeListModel> _fetchData(String? employeeFirsName) async {
+    EmployeeListModel employeeListModel =
+        await _employeeRepo.getNextEmployees(employeeFirsName);
     return employeeListModel;
   }
 
@@ -63,7 +69,26 @@ class ListEmployeesBloc extends BaseBloc {
   void onTapEmployee(EmployeeModel employeeModel) {}
 
   void charGroupGetVisible(String char) {
-    _visibleCharController.add(char);
+    if (char != _visibleCharController.value) {
+      _visibleCharController.add(char);
+    }
+  }
+
+  Future<void> onSelectChar(String char) async {
+    List<EmployeeModel> loadedEmployees = _loadedEmployees;
+
+    if (char.compareTo(_loadedEmployees.lastOrNull?.firstName ?? "") > 0) {
+      EmployeeListModel beforeChar =
+          await _employeeRepo.getAllEmployeesBefore(char);
+      EmployeeListModel afterChar =
+          await _employeeRepo.getAllEmployeesBefore(char);
+
+      loadedEmployees.addAll(beforeChar.employees);
+      loadedEmployees.addAll(afterChar.employees);
+      loadedEmployees = loadedEmployees.toSet().toList();
+
+      _loadedEmployeesController.add(loadedEmployees);
+    }
   }
 
   @mustCallSuper

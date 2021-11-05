@@ -1,4 +1,5 @@
 import 'package:casestudy/presentation/utils/app_colors.dart';
+import 'package:casestudy/presentation/widget/app_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -19,7 +20,7 @@ abstract class BaseScreenState<K extends BaseScreen, T extends BaseBloc>
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: buildAppBar(),
-      body: buildBody(),
+      body: _buildMainContent(),
     );
   }
 
@@ -27,6 +28,29 @@ abstract class BaseScreenState<K extends BaseScreen, T extends BaseBloc>
 
   PreferredSizeWidget? buildAppBar() {
     return AppBar();
+  }
+
+  Widget _buildMainContent() {
+    return Stack(
+      children: [
+        buildBody(),
+        _buildLoading(),
+      ],
+    );
+  }
+
+  Widget _buildLoading() {
+    return StreamBuilder(
+      stream: bloc.loadingStream,
+      builder: (_, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.data ?? false) {
+          return const AbsorbPointer(
+            child: AppLoadingWidget(),
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
   }
 
   Widget buildBody();

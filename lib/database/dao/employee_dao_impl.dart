@@ -46,4 +46,34 @@ class EmployeeDaoImpl extends BaseDao implements IEmployeeDao {
           DatabaseExceptionCodes.getListEmployees, e.toString());
     }
   }
+
+  @override
+  Future<List<EmployeeModel>> getNextEmployees(String? employeeName,
+      [int limit = 50]) async {
+    Database database = await tempoDB.database;
+    List<Map<String, Object?>> result = await database.query(
+      EmployeesTable.tableName,
+      limit: limit,
+      where: employeeName != null
+          ? "${EmployeeProps.firstName} > '$employeeName'"
+          : null,
+      orderBy: EmployeeProps.firstName,
+    );
+    return result
+        .map((Map<String, dynamic> item) => EmployeeModel.fromJson(item))
+        .toList();
+  }
+
+  @override
+  Future<List<EmployeeModel>> getAllEmployeesBefore(String employeeName) async {
+    Database database = await tempoDB.database;
+    List<Map<String, Object?>> result = await database.query(
+      EmployeesTable.tableName,
+      where: "${EmployeeProps.firstName} <= '$employeeName'",
+      orderBy: EmployeeProps.firstName,
+    );
+    return result
+        .map((Map<String, dynamic> item) => EmployeeModel.fromJson(item))
+        .toList();
+  }
 }

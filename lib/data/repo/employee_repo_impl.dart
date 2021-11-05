@@ -1,6 +1,5 @@
 import 'package:casestudy/common/models/employee_list_model.dart';
 import 'package:casestudy/common/models/employee_model.dart';
-import 'package:casestudy/common/models/pagination_model.dart';
 import 'package:casestudy/data/api/employee_source_interface.dart';
 import 'package:casestudy/data/dao/employee_dao_interface.dart';
 import 'package:casestudy/data/expection/data_exception.dart';
@@ -25,13 +24,22 @@ class EmployeeRepoImpl implements IEmployeeRepo {
   }
 
   @override
-  Future<EmployeeListModel> getList(PaginationModel paginationModel) async {
+  Future<EmployeeListModel> getNextEmployees(String? employeeName) async {
     try {
-      int offset = (paginationModel.page - 1) * paginationModel.itemPerPage;
-      List<EmployeeModel> employees = await _employeeDao.getList(
-          limit: paginationModel.itemPerPage, offset: offset);
-      return EmployeeListModel(
-          employees, paginationModel.copyWith(page: paginationModel.page + 1));
+      List<EmployeeModel> employees =
+          await _employeeDao.getNextEmployees(employeeName);
+      return EmployeeListModel(employees, employees.last.firstName);
+    } on Exception catch (e) {
+      throw DataException(DataExceptionCodes.getListEmployees, e.toString());
+    }
+  }
+
+  @override
+  Future<EmployeeListModel> getAllEmployeesBefore(String employeeName) async {
+    try {
+      List<EmployeeModel> employees =
+          await _employeeDao.getAllEmployeesBefore(employeeName);
+      return EmployeeListModel(employees, employees.last.firstName);
     } on Exception catch (e) {
       throw DataException(DataExceptionCodes.getListEmployees, e.toString());
     }

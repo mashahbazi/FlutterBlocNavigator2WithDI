@@ -1,9 +1,8 @@
 import 'package:casestudy/common/models/employee_model.dart';
-import 'package:casestudy/common/models/pagination_model.dart';
 
 class EmployeeListModel {
   final List<EmployeeModel> employees;
-  final PaginationModel paginationModel;
+  final String employeeName;
 
-  EmployeeListModel(this.employees, this.paginationModel);
+  EmployeeListModel(this.employees, this.employeeName);
 }

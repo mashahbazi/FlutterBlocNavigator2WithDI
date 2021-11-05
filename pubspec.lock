@@ -347,6 +347,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.2"
+  scrollable_positioned_list:
+    dependency: "direct dev"
+    description:
+      name: scrollable_positioned_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.2"
   shelf:
     dependency: transitive
     description:
@@ -471,13 +478,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  visibility_detector:
-    dependency: "direct dev"
-    description:
-      name: visibility_detector
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.2"
   watcher:
     dependency: transitive
     description:
