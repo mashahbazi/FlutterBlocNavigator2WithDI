@@ -1,4 +1,4 @@
-class DatabaseException implements Exception{
+class DatabaseException implements Exception {
   final int code;
   final String? message;
 
@@ -13,7 +13,8 @@ class DatabaseException implements Exception{
   }
 }
 
-class DatabaseExceptionCodes{
+class DatabaseExceptionCodes {
   static const int insertEmployees = 1;
   static const int getListEmployees = 2;
+  static const int getEmployees = 3;
 }

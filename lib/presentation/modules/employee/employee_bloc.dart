@@ -23,7 +23,10 @@ class EmployeeBloc extends BaseBloc {
 
   Stream<EmployeeModel> get employeeSteam => _employeesController.stream;
 
-  Future<void> loadEmployee(IEmployeeRepo employeeRepo, int id) async {}
+  Future<void> loadEmployee(IEmployeeRepo employeeRepo, int id) async {
+    EmployeeModel employeeModel = await employeeRepo.get(id);
+    _employeesController.add(employeeModel);
+  }
 
   @override
   void dispose() {

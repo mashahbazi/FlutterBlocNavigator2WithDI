@@ -15,5 +15,6 @@ class DataException implements Exception {
 
 class DataExceptionCodes {
   static const int loadData = 1;
-  static const int getListEmployees = 1;
+  static const int getListEmployees = 2;
+  static const int getEmployee = 3;
 }

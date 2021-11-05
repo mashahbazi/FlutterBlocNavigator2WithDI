@@ -44,4 +44,14 @@ class EmployeeRepoImpl implements IEmployeeRepo {
       throw DataException(DataExceptionCodes.getListEmployees, e.toString());
     }
   }
+
+  @override
+  Future<EmployeeModel> get(int id) async {
+    try {
+      EmployeeModel employee = await _employeeDao.get(id);
+      return employee;
+    } on Exception catch (e) {
+      throw DataException(DataExceptionCodes.getEmployee, e.toString());
+    }
+  }
 }

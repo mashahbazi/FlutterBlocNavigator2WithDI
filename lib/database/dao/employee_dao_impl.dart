@@ -29,13 +29,16 @@ class EmployeeDaoImpl extends BaseDao implements IEmployeeDao {
   }
 
   @override
-  Future<List<EmployeeModel>> getList({int limit = -1, int offset = 0}) async {
+  Future<List<EmployeeModel>> getNextEmployees(String? employeeName,
+      [int limit = 50]) async {
     try {
       Database database = await tempoDB.database;
       List<Map<String, Object?>> result = await database.query(
         EmployeesTable.tableName,
         limit: limit,
-        offset: offset,
+        where: employeeName != null
+            ? "${EmployeeProps.firstName} > '$employeeName'"
+            : null,
         orderBy: EmployeeProps.firstName,
       );
       return result
@@ -48,32 +51,37 @@ class EmployeeDaoImpl extends BaseDao implements IEmployeeDao {
   }
 
   @override
-  Future<List<EmployeeModel>> getNextEmployees(String? employeeName,
-      [int limit = 50]) async {
-    Database database = await tempoDB.database;
-    List<Map<String, Object?>> result = await database.query(
-      EmployeesTable.tableName,
-      limit: limit,
-      where: employeeName != null
-          ? "${EmployeeProps.firstName} > '$employeeName'"
-          : null,
-      orderBy: EmployeeProps.firstName,
-    );
-    return result
-        .map((Map<String, dynamic> item) => EmployeeModel.fromJson(item))
-        .toList();
+  Future<List<EmployeeModel>> getAllEmployeesBefore(String employeeName) async {
+    try {
+      Database database = await tempoDB.database;
+      List<Map<String, Object?>> result = await database.query(
+        EmployeesTable.tableName,
+        where: "${EmployeeProps.firstName} <= '$employeeName'",
+        orderBy: EmployeeProps.firstName,
+      );
+      return result
+          .map((Map<String, dynamic> item) => EmployeeModel.fromJson(item))
+          .toList();
+    } catch (e) {
+      throw DatabaseException(
+          DatabaseExceptionCodes.getListEmployees, e.toString());
+    }
   }
 
   @override
-  Future<List<EmployeeModel>> getAllEmployeesBefore(String employeeName) async {
-    Database database = await tempoDB.database;
-    List<Map<String, Object?>> result = await database.query(
-      EmployeesTable.tableName,
-      where: "${EmployeeProps.firstName} <= '$employeeName'",
-      orderBy: EmployeeProps.firstName,
-    );
-    return result
-        .map((Map<String, dynamic> item) => EmployeeModel.fromJson(item))
-        .toList();
+  Future<EmployeeModel> get(int id) async {
+    try {
+      Database database = await tempoDB.database;
+      List<Map<String, Object?>> result = await database.query(
+        EmployeesTable.tableName,
+        where: "${EmployeeProps.id} = $id",
+      );
+      return result
+          .map((Map<String, dynamic> item) => EmployeeModel.fromJson(item))
+          .first;
+    } catch (e) {
+      throw DatabaseException(
+          DatabaseExceptionCodes.getListEmployees, e.toString());
+    }
   }
 }
