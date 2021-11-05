@@ -16,8 +16,15 @@ class PaginationModel {
   }) =>
       PaginationModel(
         page ?? this.page,
-        itemPerPage ?? this.page,
+        itemPerPage ?? this.itemPerPage,
       );
 
   bool get isInitialPage => page == _defaultInitialPage;
+
+  @override
+  bool operator ==(Object other) =>
+      other is PaginationModel && other.hashCode == hashCode;
+
+  @override
+  int get hashCode => page;
 }

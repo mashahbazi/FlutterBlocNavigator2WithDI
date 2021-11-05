@@ -13,25 +13,34 @@ import 'package:flutter/cupertino.dart';
 class ListEmployeesBloc extends BaseBloc {
   final IEmployeeRepo _employeeRepo;
 
-  final List<EmployeeModel> _loadedEmployees = [];
   final StreamController<List<EmployeeModel>> _loadedEmployeesController =
       StreamController.broadcast();
-  PaginationModel _nextPage = PaginationModel.initialPage();
 
-  ListEmployeesBloc(AppRouter appRouter, this._employeeRepo)
-      : super(appRouter) {
-    loadEmployees();
-  }
+  final List<EmployeeModel> _loadedEmployees = [];
+  PaginationModel? _loadingPage;
+
+  ListEmployeesBloc(AppRouter appRouter, this._employeeRepo) : super(appRouter);
 
   Stream<List<EmployeeGroupModel>> get employeeGroupStream =>
       _loadedEmployeesController.stream.map(_mapEmployeeList);
 
-  Future<void> loadEmployees() async {
-    EmployeeListModel employeeListModel =
-        await _employeeRepo.getList(_nextPage);
-    _nextPage = employeeListModel.paginationModel;
-    _loadedEmployees.addAll(employeeListModel.employees);
-    _loadedEmployeesController.add(_loadedEmployees);
+  bool get hasMore => true;
+
+  Future<PaginationModel?> loadData(PaginationModel loadPage) async {
+    if (_loadingPage == null || _loadingPage != loadPage) {
+      _loadingPage = loadPage;
+      EmployeeListModel employeeListModel = await _fetchData(loadPage);
+      _loadedEmployees.addAll(employeeListModel.employees);
+      _loadedEmployeesController.add(_loadedEmployees);
+      _loadingPage = null;
+      return employeeListModel.paginationModel;
+    }
+    return null;
+  }
+
+  Future<EmployeeListModel> _fetchData(PaginationModel loadPage) async {
+    EmployeeListModel employeeListModel = await _employeeRepo.getList(loadPage);
+    return employeeListModel;
   }
 
   List<EmployeeGroupModel> _mapEmployeeList(List<EmployeeModel> employees) {
