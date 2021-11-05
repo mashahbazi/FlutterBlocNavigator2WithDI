@@ -9,29 +9,35 @@ import 'package:casestudy/domain/repo/employee_repo_interface.dart';
 import 'package:casestudy/presentation/modules/core/base_bloc.dart';
 import 'package:casestudy/presentation/router/app_router.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:rxdart/subjects.dart';
 
 class ListEmployeesBloc extends BaseBloc {
   final IEmployeeRepo _employeeRepo;
 
-  final StreamController<List<EmployeeModel>> _loadedEmployeesController =
-      StreamController.broadcast();
+  final BehaviorSubject<List<EmployeeModel>?> _loadedEmployeesController =
+      BehaviorSubject();
+  final BehaviorSubject<String> _visibleCharController = BehaviorSubject();
 
-  final List<EmployeeModel> _loadedEmployees = [];
   PaginationModel? _loadingPage;
 
   ListEmployeesBloc(AppRouter appRouter, this._employeeRepo) : super(appRouter);
 
-  Stream<List<EmployeeGroupModel>> get employeeGroupStream =>
+  Stream<List<EmployeeGroupModel>?> get employeeGroupStream =>
       _loadedEmployeesController.stream.map(_mapEmployeeList);
 
   bool get hasMore => true;
+
+  Stream<String> get charStream => _visibleCharController.stream;
 
   Future<PaginationModel?> loadData(PaginationModel loadPage) async {
     if (_loadingPage == null || _loadingPage != loadPage) {
       _loadingPage = loadPage;
       EmployeeListModel employeeListModel = await _fetchData(loadPage);
-      _loadedEmployees.addAll(employeeListModel.employees);
-      _loadedEmployeesController.add(_loadedEmployees);
+      List<EmployeeModel> loadedEmployees = _loadedEmployeesController.hasValue
+          ? _loadedEmployeesController.value!
+          : [];
+      loadedEmployees.addAll(employeeListModel.employees);
+      _loadedEmployeesController.add(loadedEmployees);
       _loadingPage = null;
       return employeeListModel.paginationModel;
     }
@@ -43,21 +49,28 @@ class ListEmployeesBloc extends BaseBloc {
     return employeeListModel;
   }
 
-  List<EmployeeGroupModel> _mapEmployeeList(List<EmployeeModel> employees) {
-    Map<String, List<EmployeeModel>> groupedData =
-        groupBy(employees, (EmployeeModel e) => e.firstName.characters.first);
-    return groupedData.keys
-        .map<EmployeeGroupModel>(
-            (String key) => EmployeeGroupModel(key, groupedData[key]!))
-        .toList();
+  List<EmployeeGroupModel>? _mapEmployeeList(List<EmployeeModel>? employees) {
+    if (employees != null) {
+      Map<String, List<EmployeeModel>> groupedData =
+          groupBy(employees, (EmployeeModel e) => e.firstName.characters.first);
+      return groupedData.keys
+          .map<EmployeeGroupModel>(
+              (String key) => EmployeeGroupModel(key, groupedData[key]!))
+          .toList();
+    }
   }
 
   void onTapEmployee(EmployeeModel employeeModel) {}
+
+  void charGroupGetVisible(String char) {
+    _visibleCharController.add(char);
+  }
 
   @mustCallSuper
   @override
   void dispose() {
     super.dispose();
     _loadedEmployeesController.close();
+    _visibleCharController.close();
   }
 }

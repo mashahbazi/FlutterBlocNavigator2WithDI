@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:casestudy/common/models/employee_group_model.dart';
 import 'package:casestudy/common/models/pagination_model.dart';
 import 'package:casestudy/presentation/modules/core/base_screen.dart';
 import 'package:casestudy/presentation/modules/list_employees/list_employees_bloc.dart';
+import 'package:casestudy/presentation/modules/list_employees/widget/character_picker_widget.dart';
 import 'package:casestudy/presentation/modules/list_employees/widget/employees_group_widget.dart';
 import 'package:casestudy/presentation/utils/app_colors.dart';
 import 'package:casestudy/presentation/utils/extensions/scroll_notification_extension.dart';
@@ -59,7 +62,12 @@ class _ListEmployeesState
       children: [
         const SearchBarWidget(),
         Expanded(
-          child: _buildListEmployeesStream(),
+          child: Row(
+            children: [
+              Expanded(child: _buildListEmployeesStream()),
+              _buildCharacterRow(),
+            ],
+          ),
         ),
       ],
     );
@@ -68,7 +76,7 @@ class _ListEmployeesState
   Widget _buildListEmployeesStream() {
     return StreamBuilder(
       stream: bloc.employeeGroupStream,
-      builder: (_, AsyncSnapshot<List<EmployeeGroupModel>> snapshot) {
+      builder: (_, AsyncSnapshot<List<EmployeeGroupModel>?> snapshot) {
         if (snapshot.hasData) {
           return _buildListEmployees(snapshot.data!);
         } else {
@@ -90,6 +98,7 @@ class _ListEmployeesState
             return EmployeesGroupWidget(
               employeeGroupModel: employeeGroups[index],
               onPressItem: bloc.onTapEmployee,
+              onGetVisible: bloc.charGroupGetVisible,
             );
           }
           if (bloc.hasMore) {
@@ -102,6 +111,10 @@ class _ListEmployeesState
         },
       ),
     );
+  }
+
+  Widget _buildCharacterRow() {
+    return CharacterPickerWidget(charStream: bloc.charStream);
   }
 
   bool onScrollNotification(ScrollNotification scrollNotification) {
