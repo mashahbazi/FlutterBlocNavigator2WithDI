@@ -15,7 +15,7 @@ class ListEmployeesBloc extends BaseBloc {
 
   final List<EmployeeModel> _loadedEmployees = [];
   final StreamController<List<EmployeeModel>> _loadedEmployeesController =
-      StreamController();
+      StreamController.broadcast();
   PaginationModel _nextPage = PaginationModel.initialPage();
 
   ListEmployeesBloc(AppRouter appRouter, this._employeeRepo)
@@ -42,6 +42,8 @@ class ListEmployeesBloc extends BaseBloc {
             (String key) => EmployeeGroupModel(key, groupedData[key]!))
         .toList();
   }
+
+  void onTapEmployee(EmployeeModel employeeModel) {}
 
   @mustCallSuper
   @override

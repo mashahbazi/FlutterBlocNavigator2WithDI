@@ -54,6 +54,8 @@ class EmployeeModel {
   factory EmployeeModel.fromJson(Map<String, dynamic> json) =>
       _$EmployeeModelFromJson(json);
 
+  String get fullName => "$firstName $lastName";
+
   Map<String, dynamic> toJson() => _$EmployeeModelToJson(this);
 
   @override
