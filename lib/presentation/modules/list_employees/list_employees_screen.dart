@@ -122,12 +122,10 @@ class _ListEmployeesState
   }
 
   Future<void> onSelectChar(String char) async {
-    bloc.showLoading();
     await bloc.onSelectChar(char);
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       itemScrollController.scrollTo(
           index: char.codeUnitAt(0) - 65, duration: const Duration(seconds: 1));
-      bloc.hideLoading();
     });
   }
 }
