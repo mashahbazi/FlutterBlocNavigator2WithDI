@@ -81,7 +81,21 @@ class EmployeeDaoImpl extends BaseDao implements IEmployeeDao {
           .first;
     } catch (e) {
       throw DatabaseException(
-          DatabaseExceptionCodes.getListEmployees, e.toString());
+          DatabaseExceptionCodes.getEmployeesLength, e.toString());
+    }
+  }
+
+  @override
+  Future<int> length() async{
+    try {
+      Database database = await tempoDB.database;
+      List<Map<String, Object?>> result = await database.rawQuery(
+        "SELECT count(${EmployeeProps.id}) from ${EmployeesTable.tableName}"
+      );
+      return result.first.values.last as int;
+    } catch (e) {
+      throw DatabaseException(
+          DatabaseExceptionCodes.getEmployeesLength, e.toString());
     }
   }
 }

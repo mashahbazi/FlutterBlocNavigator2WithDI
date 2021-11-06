@@ -17,4 +17,5 @@ class DataExceptionCodes {
   static const int loadData = 1;
   static const int getListEmployees = 2;
   static const int getEmployee = 3;
+  static const int getLength = 4;
 }

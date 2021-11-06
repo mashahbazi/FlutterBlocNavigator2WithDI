@@ -21,16 +21,7 @@ class ListEmployeesScreen extends BaseScreen {
 
 class _ListEmployeesState
     extends BaseScreenState<ListEmployeesScreen, ListEmployeesBloc> {
-  final Map<String, GlobalKey> groupKeys = {};
   final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
-
-  @override
-  void initState() {
-    super.initState();
-    itemPositionsListener.itemPositions.addListener(onScrollChange);
-  }
 
   @override
   PreferredSizeWidget? buildAppBar() {
@@ -90,33 +81,27 @@ class _ListEmployeesState
   }
 
   Widget _buildListEmployees(List<EmployeeGroupModel> employeeGroups) {
+    int itemCount = employeeGroups.length;
+    if (bloc.hasMore) {
+      itemCount++;
+    }
     return NotificationListener<ScrollNotification>(
       onNotification: onScrollNotification,
       child: ScrollablePositionedList.builder(
         itemScrollController: itemScrollController,
-        itemPositionsListener: itemPositionsListener,
-        itemCount: employeeGroups.length + 1,
+        itemCount: itemCount,
         itemBuilder: (_, int index) {
           if (index < employeeGroups.length) {
-            EmployeeGroupModel groupModel = employeeGroups[index];
-            GlobalKey? globalKey = groupKeys[groupModel.nameFirstLetter];
-            if (globalKey == null) {
-              globalKey = GlobalKey();
-              groupKeys[groupModel.nameFirstLetter] = globalKey;
-            }
             return EmployeesGroupWidget(
-              employeeGroupModel: groupModel,
+              employeeGroupModel: employeeGroups[index],
               onPressItem: bloc.onTapEmployee,
-              key: globalKey,
+              onGetVisible: bloc.charGroupGetVisible,
             );
           }
-          if (bloc.hasMore) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: AppLoadingWidget(),
-            );
-          }
-          return const SizedBox.shrink();
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            child: AppLoadingWidget(),
+          );
         },
       ),
     );
@@ -134,11 +119,6 @@ class _ListEmployeesState
       bloc.loadData();
     }
     return true;
-  }
-
-  void onScrollChange() {
-    bloc.charGroupGetVisible(String.fromCharCode(
-        itemPositionsListener.itemPositions.value.last.index + 65));
   }
 
   Future<void> onSelectChar(String char) async {

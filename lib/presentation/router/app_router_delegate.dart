@@ -19,13 +19,10 @@ class AppRouterDelegate extends RouterDelegate<ScreenConfiguration>
   }
 
   @override
-  GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
-
-  @override
   Widget build(BuildContext context) {
     List<BasePage> pages = _getPages();
     return Navigator(
-      key: navigatorKey,
+      key: _navigatorKey,
       pages: pages,
       onPopPage: (route, result) {
         if (!route.didPop(result)) return false;

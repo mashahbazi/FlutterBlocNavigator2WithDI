@@ -19,17 +19,19 @@ class ListEmployeesBloc extends BaseBloc {
   final BehaviorSubject<String> _visibleCharController =
       BehaviorSubject.seeded("");
 
+  int _itemCount = double.maxFinite.toInt();
   String? _loadingEmployeeName;
 
   ListEmployeesBloc(AppRouter appRouter, this._employeeRepo)
       : super(appRouter) {
+    _fetchItemCount();
     loadData();
   }
 
   Stream<List<EmployeeGroupModel>?> get employeeGroupStream =>
       _loadedEmployeesController.stream.map(_mapEmployeeList);
 
-  bool get hasMore => true;
+  bool get hasMore => _loadedEmployees.length < _itemCount;
 
   Stream<String> get charStream => _visibleCharController.stream;
 
@@ -51,7 +53,8 @@ class ListEmployeesBloc extends BaseBloc {
   }
 
   void onTapEmployee(EmployeeModel employeeModel) {
-    appRouter.changeToScreen(EmployeeConfiguration(employeeModel.id, employeeModel));
+    appRouter
+        .changeToScreen(EmployeeConfiguration(employeeModel.id, employeeModel));
   }
 
   void charGroupGetVisible(String char) {
@@ -79,19 +82,23 @@ class ListEmployeesBloc extends BaseBloc {
 
   Future<EmployeeListModel> _fetchData(String? employeeFirsName) async {
     EmployeeListModel employeeListModel =
-    await _employeeRepo.getNextEmployees(employeeFirsName);
+        await _employeeRepo.getNextEmployees(employeeFirsName);
     return employeeListModel;
   }
 
   List<EmployeeGroupModel>? _mapEmployeeList(List<EmployeeModel>? employees) {
     if (employees != null) {
       Map<String, List<EmployeeModel>> groupedData =
-      groupBy(employees, (EmployeeModel e) => e.firstName.characters.first);
+          groupBy(employees, (EmployeeModel e) => e.firstName.characters.first);
       return groupedData.keys
           .map<EmployeeGroupModel>(
               (String key) => EmployeeGroupModel(key, groupedData[key]!))
           .toList();
     }
+  }
+
+  Future<void> _fetchItemCount() async {
+    _itemCount = await _employeeRepo.length();
   }
 
   @mustCallSuper

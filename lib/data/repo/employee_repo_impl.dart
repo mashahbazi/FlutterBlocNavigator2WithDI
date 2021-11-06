@@ -54,4 +54,14 @@ class EmployeeRepoImpl implements IEmployeeRepo {
       throw DataException(DataExceptionCodes.getEmployee, e.toString());
     }
   }
+
+  @override
+  Future<int> length() async {
+    try {
+      int length = await _employeeDao.length();
+      return length;
+    } on Exception catch (e) {
+      throw DataException(DataExceptionCodes.getEmployee, e.toString());
+    }
+  }
 }

@@ -41,9 +41,9 @@ class EmployeeRowWidget extends StatelessWidget {
       padding: EdgeInsets.all(context.getWidthFraction(0.03)),
       child: AspectRatio(
         aspectRatio: 1,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(context.screenWidth),
-          child: Image.network(employeeModel.imageUrl),
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(employeeModel.imageUrl),
+          backgroundColor: AppColors.gray,
         ),
       ),
     );

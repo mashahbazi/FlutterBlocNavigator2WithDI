@@ -33,6 +33,7 @@ dependencies:
   json_annotation: ^4.3.0
   sqflite: ^2.0.0+4
   rxdart: ^0.27.2
+  visibility_detector: ^0.2.2
   scrollable_positioned_list: ^0.2.2
   dotted_border: ^2.0.0+1
 

@@ -9,4 +9,6 @@ abstract class IEmployeeDao {
   Future<List<EmployeeModel>> getAllEmployeesBefore(String employeeName);
 
   Future<EmployeeModel> get(int id);
+
+  Future<int> length();
 }

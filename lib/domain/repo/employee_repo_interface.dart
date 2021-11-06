@@ -9,4 +9,6 @@ abstract class IEmployeeRepo {
   Future<EmployeeListModel> getAllEmployeesBefore(String employeeName);
 
   Future<EmployeeModel> get(int id);
+
+  Future<int> length();
 }
