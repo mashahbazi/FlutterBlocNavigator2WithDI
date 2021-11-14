@@ -1,1 +1,10 @@
-# Flutter Bloc example with using Navigator 2 and dependency injector
+# Flutter app protofolio
+
+## Technologies in use:
+
+This app use flutter BLoC as architecture with repository pattern and use bloc (not flutter_bloc) as state management.
+Other technologies will:
+
+* Dependency injection (for creating objects)
+* Navigator 2
+* qflite
